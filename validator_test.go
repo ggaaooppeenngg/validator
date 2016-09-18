@@ -20,8 +20,8 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/go-validator/validator"
 	. "gopkg.in/check.v1"
-	"gopkg.in/validator.v2"
 )
 
 func Test(t *testing.T) {
@@ -374,6 +374,18 @@ func (ms *MySuite) TestBadParameter(c *C) {
 	c.Assert(errs["A"], HasError, validator.ErrBadParameter)
 	c.Assert(errs["B"], HasError, validator.ErrBadParameter)
 	c.Assert(errs["C"], HasError, validator.ErrBadParameter)
+}
+
+func (ms *MySuite) TestJsonName(c *C) {
+	type test struct {
+		A string `validate:"nonzero" json:"a"`
+	}
+	t := test{}
+	err := validator.Validate(t)
+	errs, ok := err.(validator.ErrorMap)
+	c.Assert(ok, Equals, true)
+	c.Assert(errs, HasLen, 1)
+	c.Assert(errs["a"], HasError, validator.ErrZeroValue)
 }
 
 func (ms *MySuite) TestCopy(c *C) {

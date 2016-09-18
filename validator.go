@@ -247,7 +247,14 @@ func (mv *Validator) Validate(v interface{}) error {
 			}
 		}
 		if len(errs) > 0 {
-			m[st.Field(i).Name] = errs
+			jsonTag := st.Field(i).Tag.Get("json")
+			if jsonTag != "" {
+				fields := strings.Split(jsonTag, ",")
+				if len(fields) > 0 && fields[0] != "-" {
+					fname = fields[0]
+				}
+			}
+			m[fname] = errs
 		}
 	}
 	if len(m) > 0 {
