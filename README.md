@@ -3,6 +3,8 @@ Package validator
 
 Package validator implements variable validations
 
+This is a fork which supports json name. If json name set, errors key is set to json name instead of struct filed name.
+
 Installation
 ============
 
